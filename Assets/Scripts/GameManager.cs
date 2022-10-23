@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static bool gameOver;
     public static bool levelCompleted;
     public static bool mute = false;
-    public static bool isGameStared;
+    public static bool isGameStarted;
 
     public static int currentLevelIndex;
     public static int numberOfPassedRings;
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         numberOfPassedRings = 0;
         HighScoreText.text = "Best Score\n" + PlayerPrefs.GetInt("HighScore", 0);
-        isGameStared =gameOver = levelCompleted = false;
+        isGameStarted =gameOver = levelCompleted = false;
     }
 
     // Update is called once per frame
@@ -52,11 +52,13 @@ public class GameManager : MonoBehaviour
         int progress = numberOfPassedRings * 100 / FindObjectOfType<HelixManager>().numberOfRings;
         gameProgressSlider.value = progress;
 
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !isGameStared)
-        {
-            if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId)) 
-            return;
-            isGameStared = true;
+        //if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !isGameStarted)//for Mobile
+            if (Input.GetMouseButtonDown(0) && !isGameStarted)
+            {
+            //if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))//for Mobile
+                if (EventSystem.current.IsPointerOverGameObject())
+                    return;
+            isGameStarted = true;
             GamePlayPanel.SetActive(true);
             startMenuPanel.SetActive(false);
         }
